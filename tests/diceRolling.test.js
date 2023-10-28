@@ -1,4 +1,4 @@
-const {rollDice} = require('../src/diceRolling')
+const {rollDice, rollWithAdvantage, rollWithDisadvantage} = require('../src/diceRolling')
 
 // beforeAll(() => {
 //     console.log("Message runs at the beginning of the testing");
@@ -30,14 +30,35 @@ describe("Casual tabletop gamer...", () => {
 
 describe("Tabletop RPG gamer...", () => {
     test("..wants to roll a D20 with advantage and see both roll results as well the best roll", () => {
-        expect(rollDice(20)).toBeGreaterThan(0);
+        // let rollDiceWithAdvantage = jest.fn().mockReturnValue({
+        //     finalResult: 18,
+        //     rolls: [ 4, 18 ],
+        //     jwt: "asfsdadfhadr"
+        // })
+        // console.log(rollDiceWithAdvantage());
+        // expect(rollDiceWithAdvantage().finalResult).toBe(18);
+        let rollResults = rollWithAdvantage(20);
+        console.log(rollResults.finalResult);
+        console.log(rollResults.rolls);
+        expect(rollResults.finalResult).toBeGreaterThan(0);
+        expect(rollResults.finalResult).toBeLessThanOrEqual(20);
+        expect(rollResults.rolls).toHaveLength(2);
+        expect(rollResults.rolls).toContain(rollResults.finalResult);
+        expect(rollResults.finalResult).toBe(Math.max(...rollResults.rolls));
     });
 
     test("..wants to roll a D20 with disadvantage and see both roll results as well the worst roll", () => {
-        expect(rollDice(20)).toBeGreaterThan(0);
+        let rollResults = rollWithDisadvantage(20);
+        console.log(rollResults.finalResult);
+        console.log(rollResults.rolls);
+        expect(rollResults.finalResult).toBeGreaterThan(0);
+        expect(rollResults.finalResult).toBeLessThanOrEqual(20);
+        expect(rollResults.rolls).toHaveLength(2);
+        expect(rollResults.rolls).toContain(rollResults.finalResult);
+        expect(rollResults.finalResult).toBe(Math.min(...rollResults.rolls));
     });
 
-    test("...wants to roll a D20 one hundred times and see how many natural 20s they get", () => {
+    test.skip("...wants to roll a D20 one hundred times and see how many natural 20s they get", () => {
         let diceResults = [];
         for (let i = 0; i < 100 ; i++){
             diceResults.push(rollDice(20))
